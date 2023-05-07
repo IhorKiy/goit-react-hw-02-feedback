@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
-import { Notification } from "./Notification/Notification";
+import { Notification } from './Notification/Notification';
 import { Statistics } from './Statistics/Statistics';
 import { Section } from './Section/Section';
 
@@ -12,23 +12,8 @@ export class App extends Component {
     bad: 0,
   };
 
-  handleGood = evt => {
-    evt.preventDefault();
-    this.setState(prevstate => ({ good: prevstate.good + 1 }));
-    this.countTotalFeedback();
-    this.countPositiveFeedbackPercentage();
-  };
-
-  handleNeutral = evt => {
-    evt.preventDefault();
-    this.setState(prevstate => ({ neutral: prevstate.neutral + 1 }));
-    this.countTotalFeedback();
-    this.countPositiveFeedbackPercentage();
-  };
-
-  handleBad = evt => {
-    evt.preventDefault();
-    this.setState(prevstate => ({ bad: prevstate.bad + 1 }));
+  handleChange = key => {
+    this.setState(prevstate => ({ [key]: prevstate[key] + 1 }));
     this.countTotalFeedback();
     this.countPositiveFeedbackPercentage();
   };
@@ -60,27 +45,24 @@ export class App extends Component {
           color: '#010101',
         }}
       >
-        
-        
-        
-
         <Section title="Plese, leave feadbeack">
           <FeedbackOptions
-            handleGood={this.handleGood}
-            handleNeutral={this.handleNeutral}
-            handleBad={this.handleBad}
+            state={this.state}
+            handleFeadbeack={this.handleChange}
           />
         </Section>
         <Section title="Statistics">
-
-{!this.state.good&&!this.state.neutral&&!this.state.bad? (<Notification message="There is no feedback"/>):(<Statistics
-            good={this.state.good}
-            neutral={this.state.neutral}
-            bad={this.state.bad}
-            total={this.state.total}
-            positivePercent={this.state.positivePersent}
-          />) }
-          
+          {!this.state.good && !this.state.neutral && !this.state.bad ? (
+            <Notification message="There is no feedback" />
+          ) : (
+            <Statistics
+              good={this.state.good}
+              neutral={this.state.neutral}
+              bad={this.state.bad}
+              total={this.state.total}
+              positivePercent={this.state.positivePersent}
+            />
+          )}
         </Section>
       </div>
     );
